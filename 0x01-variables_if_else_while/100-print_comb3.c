@@ -15,15 +15,11 @@ int main(void)
 	{
 		while (y <= '9')
 		{
-			if (!(x > y) || x == y)
+			if (x < y)
 			{
 				putchar(x);
 				putchar(y);
-				if (x == '8' && y == '9')
-				{
-					putchar('\n');
-				}
-				else
+				if (x != '8' || (x == '8'  && y != '9'))
 				{
 					putchar(',');
 					putchar(' ');
@@ -31,8 +27,9 @@ int main(void)
 			}
 			y++;
 		}
-		y = '0';
 		x++;
+		y = '0';
 	}
+	putchar('\n');
 	return (0);
 }
