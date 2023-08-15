@@ -10,24 +10,17 @@
 
 int main(void)
 {
-	float x;
-	unsigned long fib1 = 0, fib2 = 1, y;
+	int x = 0;
+	long y = 1, z = 2, sum = z;
 
-	while (1)
+	while (z + y < 4000000)
 	{
-		y = fib1 + fib2;
-	if (y > 4000000)
-	{
-		break;
+		z += y;
+		if (z % 2 == 0)
+			sum += z;
+		y = z - y;
+		x++;
 	}
-	if ((y % 2) == 0)
-	{
-		x += y;
-		fib1 = fib2;
-		fib2 = y;
-	}
-	}
-	printf("%.0f\n", x);
-
+	printf("%ld\n", sum);
 	return (0);
 }
