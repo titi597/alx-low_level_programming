@@ -26,7 +26,7 @@ void print_buffer(char *b, int size)
 		for (k = 0; k < 10; k++)
 		{
 			if (k < j)
-				printf("%2x", *(b + i + k));
+				printf("%02x", *(b + i + k));
 			else
 				printf(" ");
 			if (k % 2)
