@@ -9,7 +9,7 @@
 
 char *_strstr(char *haystack, char *needle)
 {
-	if (!*needle)
+	if (*needle == 0)
 	{
 		return (haystack);
 	}
@@ -22,7 +22,7 @@ char *_strstr(char *haystack, char *needle)
 			a++;
 			b++;
 		}
-		if (!*b)
+		if (*b == 0)
 		{
 			return (haystack);
 		}
