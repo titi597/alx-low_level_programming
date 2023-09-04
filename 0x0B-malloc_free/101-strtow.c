@@ -8,13 +8,15 @@
  */
 void t_free_grid(char **grid, int height)
 {
-	if (grid != NULL || height != 0)
+	int a;
+
+	a = 0;
+	while (a < height)
 	{
-		for (; height > 0; height--)
-			free(grid[height]);
-		free(grid[height]);
-		free(grid);
+		free(grid[a]);
+		a++;
 	}
+	free(grid);
 
 }
 /**
