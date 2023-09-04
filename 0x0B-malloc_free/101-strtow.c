@@ -1,9 +1,7 @@
 #include "main.h"
 #include <stdlib.h>
-
 /**
- * t_free_grid - a function that frees a 2 dimensional grid previously
- * created by your alloc_grid function.
+ * t_free_grid - a function that frees a 2 dimensional grid.
  * @grid: pointer to an array
  * @height: height of an array
  * Return: void
@@ -19,21 +17,17 @@ void t_free_grid(char **grid, int height)
 	}
 
 }
-
 /**
  * strtow - a function that splits a string into words.
  * @str: string to be splited
  * Return: a pointer to an array of strings (words)
  */
-
 char **strtow(char *str)
 {
 	char **a;
 	int x, y, z, height, d;
 
-	if (str == NULL)
-		return (NULL);
-	if (*str == '\0')
+	if (str == NULL || *str == '\0')
 		return (NULL);
 	for (x = height = 0; str[x] != '\0'; x++)
 		if (str[x] != ' ' && (str[x + 1] == ' ' || str[x + 1] == '\0'))
@@ -41,7 +35,6 @@ char **strtow(char *str)
 	{
 	a = malloc(sizeof(char *) * (height + 1));
 	}
-
 	if (a == NULL || height == 0)
 	{
 		free(a);
