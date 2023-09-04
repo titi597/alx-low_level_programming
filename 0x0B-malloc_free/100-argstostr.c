@@ -13,11 +13,10 @@ char *argstostr(int ac, char **av)
 	char *a;
 	int x = 0, y, z, d = 0;
 
-	if (ac == 0)
+	if (ac == 0 || av == NULL)
+	{
 		return (NULL);
-	if (av == NULL)
-		return (NULL);
-
+	}
 	for (y = 0; y < ac; y++)
 	{
 		for (z = 0; av[y][z]; z++)
