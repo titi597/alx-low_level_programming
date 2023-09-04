@@ -16,13 +16,9 @@ char *str_concat(char *s1, char *s2)
 	int c;
 	char *d;
 
-	if (s1 == NULL)
+	if (s1 == NULL || s2 == NULL)
 	{
-		s1 = "";
-	}
-	if (s2 == NULL)
-	{
-		s2 = "";
+		return ("");
 	}
 	a = 0;
 	for (c = 0; s1[c] != '\0'; c++)
