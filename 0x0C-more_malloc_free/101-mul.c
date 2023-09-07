@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
 		printf("Error\n");
 		return (98);
 	}
-	if (!isNumber(a) || !isNumber(a))
+	if (!isNumber(a) || !isNumber(b))
 	{
 		printf("Error\n");
 		return (98);
