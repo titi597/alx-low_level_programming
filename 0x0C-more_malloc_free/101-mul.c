@@ -19,7 +19,6 @@ int _isdigit(char *str)
 	}
 	return (1);
 }
-
 /**
  * _strlen - returing string length
  * @str: string
@@ -36,7 +35,6 @@ int _strlen(char *str)
 }
 /**
  * errors - handle the main errors.
- * Return: void
  */
 void errors(void)
 {
@@ -54,16 +52,12 @@ int main(int argc, char *argv[])
 	char *a = NULL, *b = NULL;
 	int i, j, k, l, m, n, o, *result, r = 0;
 
-	if (argc != 3)
-		errors();
 	a = argv[1], b = argv[2];
-	if (!_isdigit(a) || !_isdigit(b))
+	if (argc != 3 || !_isdigit(a) || !_isdigit(b))
 		errors();
 	i = _strlen(a), j = _strlen(b);
 	k = i + j;
-	{
-		result = malloc(sizeof(int) * (k + 1));
-	}
+	result = malloc(sizeof(int) * (k + 1));
 	if (!result)
 		return (1);
 	for (l = 0; l <= k; l++)
