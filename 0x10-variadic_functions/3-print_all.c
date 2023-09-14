@@ -12,42 +12,38 @@
 void print_all(const char * const format, ...)
 {
 	va_list avatar;
-	char *ptr = (char *)format, *apt = "", *pvr;
+	char *apt = "", *pvr;
 	int a;
 
 	va_start(avatar, format);
 
-	while (ptr && *ptr)
+	if (format)
 	{
-		if (*ptr == 'c')
-		{
-			printf("%s%c", apt, va_arg(avatar, int));
-		}
-		else if (*ptr == 'i')
-		{
-			printf("%s%d", apt, va_arg(avatar, int));
-		}
-		else if (*ptr == 'f')
-		{
-			printf("%s%f", apt, va_arg(avatar, double));
-		}
-		else if (*ptr == 's')
-		{
-			pvr = va_arg(avatar, char *);
-			if (pvr == NULL)
-				printf("%s(nil)", apt);
-			else
-			{
-				printf("%s%s", apt, pvr);
-			}
-		}
 		a = 0;
-		if (a == 0)
+		while (format[a])
 		{
+			switch (format[a])
+			{
+				case 'c':
+					printf("%s%c", apt, va_arg(avatar, int));
+					break;
+				case 'i':
+					printf("%s%d", apt, va_arg(avatar, int));
+					break;
+				case 'f':
+					printf("%s%f", apt, va_arg(avatar, double));
+					break;
+				case 's':
+					pvr = va_arg(avatar, char *);
+					printf("%s%s", apt, (pvr ? pvr : "(nil)"));
+					break;
+				default:
+					a++;
+					continue;
+			}
 			apt = ", ";
+			a++;
 		}
-		ptr++;
-		a++;
 	}
 	printf("\n");
 	va_end(avatar);
