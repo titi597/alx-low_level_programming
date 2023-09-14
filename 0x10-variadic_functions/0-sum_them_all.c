@@ -11,9 +11,9 @@ int sum_them_all(const unsigned int n, ...)
 {
 	int sum = 0;
 	unsigned int a;
-	va_list args;
+	va_list avatar;
 
-	va_start(args, n);
+	va_start(avatar, n);
 
 	if (n == 0)
 	{
@@ -21,9 +21,9 @@ int sum_them_all(const unsigned int n, ...)
 	}
 
 	for (a = 0; a < n; a++)
-		sum += va_arg(args, int);
+		sum += va_arg(avatar, int);
 
-	va_end(args);
+	va_end(avatar);
 
 	return (sum);
 }
