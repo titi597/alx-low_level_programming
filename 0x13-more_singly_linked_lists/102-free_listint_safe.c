@@ -11,10 +11,10 @@ size_t free_listint_safe(listint_t **h)
 	size_t aka = 0;
 	listint_t *next;
 
-	if (h == NULL || *h == NULL)
+	if (h == NULL)
 		return (0);
 
-	while (h != NULL)
+	while (*h != NULL)
 	{
 		aka++;
 		next = (*h)->next;
