@@ -9,28 +9,29 @@
 size_t free_listint_safe(listint_t **h)
 {
 	size_t aka = 0;
-	listint_t*titi;
+	listint_t *apts;
+	int titi;
 
 	if (!h || !*h)
 		return (0);
 
-	while (*h)
+	for (; *h; aka++)
 	{
-		switch ((*h) - (*h)->next)
+		titi = *h - (*h)->next;
+		if (titi > 0)
 		{
-			case 1:
-				titi = (*h)->next;
-				free(*h);
-				*h = titi;
-				aka++;
-				break;
-			default:
-				free(*h);
-				*h = NULL;
-				aka++;
-				break;
+			apts = (*h)->next;
+			free(*h);
+			*h = apts;
+		}
+		else
+		{
+		free(*h);
+		*h = NULL;
+		break;
 		}
 	}
+	*h = NULL;
 
 	return (aka);
 }
