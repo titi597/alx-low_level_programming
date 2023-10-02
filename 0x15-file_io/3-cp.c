@@ -7,10 +7,10 @@ char *create_buffer(char *(file));
 void close_file(int fd);
 
 /**
- * create_buffer - allocation 1024 bytes for a buffer
- * @file: the name of buffer is strong chars for.
+ * create_buffer - allocating buffer size of 1024 bytes.
+ * @file: the name of file
  *
- * Return: a pointer to the newly allocated buffer
+ * Return: a pointer to the newly allocated size of buffer
  */
 
 char *create_buffer(char *file)
@@ -27,16 +27,16 @@ char *create_buffer(char *file)
 	return (buffer);
 }
 /**
- * close_file -closes file descriptiors
- * @fd: the file descriptor to be closed
+ * close_file - function that closes afile
+ * @fd: the closed file
  */
 void close_file(int fd)
 {
-	int c;
+	int a;
 
-	c = close(fd);
+	a = close(fd);
 
-	if (c == -1)
+	if (a == -1)
 	{
 		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fd);
 		exit(100);
