@@ -17,15 +17,22 @@ int append_text_to_file(const char *filename, char *text_content)
 		return (-1);
 	}
 
-	titi = open(filename, O_WRONLY | O_CREAT | O_APPEND, S_IRUSR | S_IWUSR);
+	titi = open(filename, O_WRONLY | O_APPEND);
+
 	if (titi == -1)
 	{
-		return (-1);
+		titi = open(filename, O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);
+
+		if (titi == -1)
+		{
+			return (-1);
+		}
 	}
+
 	if (text_content == NULL)
 	{
 		close(titi);
-		return (0);
+		return (1);
 	}
 
 	byteswritten = write(titi, text_content, strlen(text_content));
