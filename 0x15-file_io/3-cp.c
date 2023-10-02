@@ -49,8 +49,10 @@ int main(int argc, char *argv[])
 		if (apts == -1)
 			error_file(-1, 0, argv);
 		aptr = write(file_to, buffers, apts);
-		if (aptr == -1)
-			error_file(0, -1, argv);
+		{
+			if (aptr == -1)
+				error_file(0, -1, argv);
+		}
 	}
 	titi = close(file_from);
 	if (titi == -1)
@@ -59,6 +61,7 @@ int main(int argc, char *argv[])
 		exit(100);
 	}
 	titi = close(file_to);
+	if (titi == -1)
 	{
 		dprintf(STDERR_FILENO, "Error: can't close fd %d\n", file_to);
 		exit(100);
