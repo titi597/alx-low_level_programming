@@ -33,13 +33,11 @@ int copyFile(const char *file_from, const char *file_to)
 	char buffer[BUFFER_SIZE];
 	ssize_t bytes_read, bytes_written;
 
-	fd_from = open(file_from, O_RDONLY);
 	if (fd_from == -1)
 	{
 		exitWithError(98, "Error: Can't read from file %s", file_from);
 	}
 
-	fd_to = open(file_to, O_WRONLY | O_CREAT | O_TRUNC, 0664);
 	if (fd_to == -1)
 	{
 		close(fd_from);
