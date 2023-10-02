@@ -1,24 +1,48 @@
 #include "main.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
+char *create_buffer(char *(file));
+void close_file(int fd);
+
 /**
- * error_file - check if file is opened and handle errors
- * @file_from: sourcefofile to copy from and to check
- * @file_to: destination file to copy to
- * @argv: pointer to an array
+ * create_buffer - allocation 1024 bytes for a buffer
+ * @file: the name of buffer is strong chars for.
+ *
+ * Return: a pointer to the newly allocated buffer
  */
-void error_file(int file_from, int file_to, char *argv[])
+
+char *create_buffer(char *file)
 {
-	if (file_from == -1)
+	char *buffer;
+
+	buffer = malloc(sizeof(char) * 1024);
+
+	if (buffer == NULL)
 	{
-		dprintf(STDERR_FILENO, "Error: can't read from file %s\n", argv[1]);
-		exit(98);
-	}
-	if (file_to == -1)
-	{
-		dprintf(STDERR_FILENO, "Error: can't write to %s\n", argv[2]);
+		dprintf(STDERR_FILENO, "Error: Can't write to %s\n", file);
 		exit(99);
 	}
+	return (buffer);
 }
+/**
+ * close_file -closes file descriptiors
+ * @fd: the file descriptor to be closed
+ */
+void close_file(int fd)
+{
+	int c;
+
+	c = close(fd);
+
+	if (c == -1)
+	{
+		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fd);
+		exit(100);
+	}
+}
+
 /**
  * main - copy content of a file from one to another
  * @argc: an array
@@ -27,44 +51,41 @@ void error_file(int file_from, int file_to, char *argv[])
  */
 int main(int argc, char *argv[])
 {
-	int file_from, file_to, titi;
-	ssize_t apts, aptr;
-	char buffers[1024];
+	int aptr, apts, titi, titi2;
+	char *buffer;
 
 	if (argc != 3)
 	{
-		dprintf(STDERR_FILENO, "%s\n", "Usage: cp file_from file_to");
+		dprintf(STDERR_FILENO, "Usage: cp file_from file_to\n");
 		exit(97);
 	}
+	buffer = create_buffer(argv[2]);
+	aptr = open(argv[1], O_RDONLY);
+	apts = read(aptr, buffer, 1024);
+	titi = open(argv[2], O_CREAT | O_WRONLY | O_TRUNC, 0664);
 
-	file_from = open(argv[1], O_RDONLY);
-	file_to = open(argv[2], O_CREAT | O_WRONLY | O_TRUNC | O_APPEND, 0664);
-	error_file(file_from, file_to, argv);
-
-	apts = 1024;
-	while (apts == 1024)
-	{
-		apts = read(file_from, buffers, 1024);
-		if (apts == -1)
-			error_file(-1, 0, argv);
-		aptr = write(file_to, buffers, apts);
+	do {
+		if (aptr == -1 || apts == -1)
 		{
-			if (aptr == -1)
-				error_file(0, -1, argv);
+			dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", argv[1]);
+			free(buffer);
+			exit(98);
 		}
-	}
-	titi = close(file_from);
-	if (titi == -1)
-	{
-		dprintf(STDERR_FILENO, "Error: can't close fd %d\n", file_from);
-		exit(100);
-	}
-	titi = close(file_to);
-	if (titi == -1)
-	{
-		dprintf(STDERR_FILENO, "Error: can't close fd %d\n", file_to);
-		exit(100);
-	}
+		titi2 = write(titi, buffer, apts);
+		if (titi == -1 || titi2 == -1)
+		{
+			dprintf(STDERR_FILENO, "Error: Can't write to %s\n", argv[2]);
+			free(buffer);
+			exit(99);
+		}
+		apts = read(aptr, buffer, 1024);
+		titi = open(argv[2], O_WRONLY | O_APPEND);
+	} while (apts > 0);
+
+	free(buffer);
+	close_file(aptr);
+	close_file(titi);
+
 	return (0);
 }
 
