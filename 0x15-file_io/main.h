@@ -18,5 +18,7 @@ int main(int argc, char *argv[]);
 void copyFile(const char *file_from, const char *file_to);
 int openFile(const char *file_name, int flags, mode_t mode);
 void closeFile(int fd);
-#endif
+void exitWithError(int code, const char *format, ...);
+void error_file(int file_from, int file_to, char *argv[]);
+#endif /*MAIN_H*/
 
