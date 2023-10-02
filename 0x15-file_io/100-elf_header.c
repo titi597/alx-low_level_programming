@@ -5,7 +5,9 @@
 #include <fcntl.h>
 #include <stdint.h>
 #include <string.h>
-
+#include <elf.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 /**
  * displayElfHeader - Function to display ELF header information
  * @header: header information
@@ -15,13 +17,13 @@ void displayElfHeader(ElfHeader *header)
 	int i;
 
 	printf("ELF Header:\n");
-	printf("  Magic:   ");
+	printf("Magic: ");
 	for (i = 0; i < ELF_MAGIC_SIZE; i++)
 	{
 		printf("%02x ", header->e_ident[i]);
 	}
 	printf("\n");
-	printf("  Class:                             ");
+	printf("Class: ");
 	switch (header->e_ident[4])
 	{
 		case 1:
@@ -34,7 +36,7 @@ void displayElfHeader(ElfHeader *header)
 			printf("<unknown>\n");
 			break;
 	}
-	printf("  Data:                              ");
+	printf("Data: ");
 	switch (header->e_ident[5])
 	{
 		case 1:
@@ -47,8 +49,8 @@ void displayElfHeader(ElfHeader *header)
 			printf("<unknown>\n");
 			break;
 	}
-	printf("  Version:                %u (current)\n", header->e_ident[6]);
-	printf("  Entry point address:             0x%lx\n", header->e_entry);
+	printf("Version: %u (current)\n", header->e_ident[6]);
+	printf("Entry point address: 0x%lx\n", header->e_entry);
 }
 /**
  * main - main function
