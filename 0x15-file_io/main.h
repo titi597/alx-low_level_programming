@@ -8,6 +8,20 @@
 #include <sys/types.h>
 #include <string.h>
 #include <errno.h>
+#include <stdint.h>
+#define ELF_MAGIC_SIZE 16
+
+/* ELF Header structure */
+typedef struct
+{
+	uint8_t e_ident[ELF_MAGIC_SIZE];
+	uint16_t e_type;
+	uint16_t e_machine;
+	uint32_t e_version;
+	uint64_t e_entry;
+} ElfHeader;
+void displayElfHeader(ElfHeader *header);
+
 #define BUFFER_SIZE 1024
 
 int _putchar(char c);
