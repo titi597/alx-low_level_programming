@@ -1,80 +1,67 @@
 #include "main.h"
-#include <stdarg.h>
-/**
- * exitWithError - functions that exit with an error
- * @exitCode: exiting code
- * @format: format to be used
- * @...: message of code
- */
-
-void exitWithError(int exitCode, const char *format, ...)
-{
-	va_list args;
-
-	va_start(args, format);
-	vfprintf(stderr, format, args);
-	va_end(args);
-	exit(exitCode);
-}
+#include <stdio.h>
 /**
  * error_file - check if file is opened and handle errors
- * @file_from: source of file
- * @file_to: destination of file
- * @argv: point to an array
+ * @file_from: sourcefofile to copy from and to check
+ * @file_to: destination file to copy to
+ * @argv: pointer to an array
  */
-
 void error_file(int file_from, int file_to, char *argv[])
 {
 	if (file_from == -1)
 	{
-		exitWithError(98, "Error: can't read from file %s", argv[1]);
+		dprintf(STDERR_FILENO, "Error: can't read from file %s\n", argv[1]);
+		exit(98);
 	}
 	if (file_to == -1)
 	{
-		exitWithError(99, "Error: can't write to %s", argv[2]);
+		dprintf(STDERR_FILENO, "Error: can't write to %s\n", argv[2]);
+		perror("Error");
+		exit(99);
 	}
 }
 /**
- * main - main function
- * @argc: argument of an array
+ * main - copy content of a file from one to another
+ * @argc: an array
  * @argv: pointer to an array
  * Return: 0
  */
-
 int main(int argc, char *argv[])
 {
-	char buf[1024];
-	ssize_t nchars, nwr;
-	const char *file_from = argv[1];
-	const char *file_to = argv[2];
-	int file_from_fd = open(file_from, O_RDONLY);
-	int file_to_fd = open(file_to, O_CREAT | O_WRONLY | O_TRUNC | O_APPEND, 0664);
-
-	error_file(file_from_fd, file_to_fd, argv);
+	int file_from, file_to, titi;
+	ssize_t apts, aptr;
+	char buffers[1024];
 
 	if (argc != 3)
 	{
-		exitWithError(97, "Usage: cp file_from file_to");
+		dprintf(STDERR_FILENO, "%s\n", "Usage: cp file_from file_to");
+		exit(97);
 	}
 
-	nchars = 1024;
+	file_from = open(argv[1], O_RDONLY);
+	file_to = open(argv[2], O_CREAT | O_WRONLY | O_TRUNC | O_APPEND, 0664);
+	error_file(file_from, file_to, argv);
 
-	while (nchars == 1024)
+	apts = 1024;
+	while (apts == 1024)
 	{
-		nchars = read(file_from_fd, buf, 1024);
-		if (nchars == -1)
+		apts = read(file_from, buffers, 1024);
+		if (apts == -1)
 			error_file(-1, 0, argv);
-		nwr = write(file_to_fd, buf, nchars);
-		if (nwr == -1)
+		aptr = write(file_to, buffers, apts);
+		if (aptr == -1)
 			error_file(0, -1, argv);
 	}
-	if (close(file_from_fd) == -1)
+	titi = close(file_from);
+	if (titi == -1)
 	{
-		exitWithError(100, "Error: can't close fd %d", file_from_fd);
+		dprintf(STDERR_FILENO, "Error: can't close fd %d\n", file_from);
+		exit(100);
 	}
-	if (close(file_to_fd) == -1)
+	titi = close(file_to);
 	{
-		exitWithError(100, "Error: can't close fd %d", file_to_fd);
+		dprintf(STDERR_FILENO, "Error: can't close fd %d\n", file_to);
+		exit(100);
 	}
 	return (0);
 }
