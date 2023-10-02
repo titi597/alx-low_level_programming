@@ -14,7 +14,6 @@ int append_text_to_file(const char *filename, char *text_content)
 
 	if (filename == NULL)
 	{
-		dprintf(2, "filename is NULL\n");
 		return (-1);
 	}
 
@@ -22,7 +21,6 @@ int append_text_to_file(const char *filename, char *text_content)
 			S_IWUSR);
 	if (titi == -1)
 	{
-		dprintf(2, "Error opening file\n");
 		return (-1);
 	}
 	if (text_content == NULL)
@@ -35,7 +33,6 @@ int append_text_to_file(const char *filename, char *text_content)
 
 	if (byteswritten == -1)
 	{
-		dprintf(2, "Error writing to file\n");
 		close(titi);
 		return (-1);
 	}
