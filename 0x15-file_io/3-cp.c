@@ -2,85 +2,85 @@
 #include <stdarg.h>
 
 #define BUFFER_SIZE 1024
+/**
+ * openFile - Open a file and handle errors.
+ * @file_name: the name of the file
+ * @flags: flags to be handled
+ * @mode: mode to be handled
+ * Return: fd
+ */
+int openFile(const char *file_name, int flags, mode_t mode)
+{
+	int fd = open(file_name, flags, mode);
+
+	if (fd == -1)
+	{
+		dprintf(STDERR_FILENO, "Error: Can't open file %s\n", file_name);
+		exit(98);
+	}
+	return (fd);
+}
 
 /**
- * exitWithError - function that exits with an error
- * @code: code that encycript message
- * @format: the message format
- * @...: additional arguments for message
+ * closeFile - Close a file and handle errors.
+ * @fd: ....
  */
-
-void exitWithError(int code, const char *format, ...)
+void closeFile(int fd)
 {
-	va_list args;
-
-	va_start(args, format);
-	vfprintf(stderr, format, args);
-	va_end(args);
-	fprintf(stderr, "\n");
-	exit(code);
+	if (close(fd) == -1)
+	{
+		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fd);
+		exit(100);
+	}
 }
 /**
  * copyFile - a program that copies the content of a file to another file
  * @file_from: source of file to be copied
  * @file_to: destinationof copied file
- * Return: 0 (success)
  */
-int copyFile(const char *file_from, const char *file_to)
+
+void copyFile(const char *file_from, const char *file_to)
 {
-	int fd_from = open(file_from, O_RDONLY);
-	int fd_to = open(file_to, O_WRONLY | O_CREAT | O_TRUNC, 0664);
+	int fd_from = openFile(file_from, O_RDONLY, 0664);
+	int fd_to = openFile(file_to, O_WRONLY | O_CREAT | O_TRUNC, 0664);
 	char buffer[BUFFER_SIZE];
 	ssize_t bytes_read, bytes_written;
 
-	if (fd_from == -1)
-	{
-		exitWithError(98, "Error: Can't read from file %s", file_from);
-	}
-
-	if (fd_to == -1)
-	{
-		close(fd_from);
-		exitWithError(99, "Error: Can't write to file %s", file_to);
-	}
 	while ((bytes_read = read(fd_from, buffer, BUFFER_SIZE)) > 0)
 	{
 		bytes_written = write(fd_to, buffer, bytes_read);
 		if (bytes_written == -1)
 		{
-			close(fd_from);
-			close(fd_to);
-			exitWithError(99, "Error: Can't write to file %s", file_to);
+			dprintf(STDERR_FILENO, "Error: Can't write to file %s\n", file_to);
+			closeFile(fd_from);
+			closeFile(fd_to);
+			exit(99);
 		}
 	}
 	if (bytes_read == -1)
 	{
-		close(fd_from);
-		close(fd_to);
-		exitWithError(98, "Error: Can't read from file %s", file_from);
+		dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", file_from);
+		closeFile(fd_from);
+		closeFile(fd_to);
+		exit(98);
 	}
-	if (close(fd_from) == -1)
-		exitWithError(100, "Error: Can't close fd %d", fd_from);
-	if (close(fd_to) == -1)
-		exitWithError(100, "Error: Can't close fd %d", fd_to);
-	return (0);
+	closeFile(fd_from);
+	closeFile(fd_to);
 }
 /**
  * main - main function
  * @argc: argument of an array
  * @argv: pointer to an array
- * Return: copyFile(file_from, file_to).
+ * Return: 0
  */
 
 int main(int argc, char *argv[])
 {
-	const char *file_from = argv[1];
-	const char *file_to = argv[2];
-
 	if (argc != 3)
 	{
-		exitWithError(97, "Usage: cp file_from file_to");
+		dprintf(STDERR_FILENO, "Usage: cp file_from file_to\n");
+		exit(97);
 	}
-	return (copyFile(file_from, file_to));
+	copyFile(argv[1], argv[2]);
+	return (0);
 }
-
