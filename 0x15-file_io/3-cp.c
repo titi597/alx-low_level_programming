@@ -3,8 +3,6 @@
 #include <stdlib.h>
 #include <fcntl.h>
 #include <unistd.h>
-char *create_buffer(char *(file));
-void close_file(int fd);
 
 /**
  * create_buffer - allocating buffer size of 1024 bytes.
@@ -27,10 +25,10 @@ char *create_buffer(char *file)
 	return (buffer);
 }
 /**
- * close_file - function that closes afile
+ * closeFile - function that closes afile
  * @fd: the closed file
  */
-void close_file(int fd)
+void closeFile(int fd)
 {
 	int a;
 
@@ -83,8 +81,8 @@ int main(int argc, char *argv[])
 	} while (apts > 0);
 
 	free(buffer);
-	close_file(aptr);
-	close_file(titi);
+	closeFile(aptr);
+	closeFile(titi);
 
 	return (0);
 }
