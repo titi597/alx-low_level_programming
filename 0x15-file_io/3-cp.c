@@ -16,7 +16,6 @@ void error_file(int file_from, int file_to, char *argv[])
 	if (file_to == -1)
 	{
 		dprintf(STDERR_FILENO, "Error: can't write to %s\n", argv[2]);
-		perror("Error");
 		exit(99);
 	}
 }
