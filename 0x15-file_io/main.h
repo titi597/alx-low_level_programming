@@ -21,7 +21,8 @@ typedef struct
 } MyElfHeader;
 
 void displayMyElfHeader(MyElfHeader *header);
-
+void displayMagic(const uint8_t *e_ident);
+void displayClass(const uint8_t *e_ident);
 #define BUFFER_SIZE 1024
 
 int _putchar(char c);

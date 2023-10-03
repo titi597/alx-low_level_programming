@@ -9,48 +9,54 @@
 #include <sys/stat.h>
 #include <elf.h>
 /**
- * displayMyElfHeader - Function to display ELF header information
- * @header: header information
+ * displayMagic - displaying magic
+ * @e_ident: .....
  */
-void displayMyElfHeader(MyElfHeader *header)
+void displayMagic(const uint8_t *e_ident)
 {
 	int i;
 
-	printf("ELF Header:\n");
 	printf("Magic: ");
 	for (i = 0; i < ELF_MAGIC_SIZE; i++)
 	{
-		printf("%02x ", header->e_ident[i]);
+		printf("%02x", e_ident[i]);
+		if (i < ELF_MAGIC_SIZE - 1)
+		{
+			printf(" ");
+		}
 	}
 	printf("\n");
+}
+/**
+ *  displayClass - displaying class
+ *  @e_ident: .....
+ */
+
+void displayClass(const uint8_t *e_ident)
+{
 	printf("Class: ");
-	switch (header->e_ident[4])
+	switch (e_ident[EI_CLASS])
 	{
-		case 1:
+		case ELFCLASS32:
 			printf("ELF32\n");
 			break;
-		case 2:
+		case ELFCLASS64:
 			printf("ELF64\n");
 			break;
 		default:
 			printf("<unknown>\n");
 			break;
 	}
-	printf("Data: ");
-	switch (header->e_ident[5])
-	{
-		case 1:
-			printf("2's complement, little endian\n");
-			break;
-		case 2:
-			printf("2's complement, big endian\n");
-			break;
-		default:
-			printf("<unknown>\n");
-			break;
-	}
-	printf("Version: %u (current)\n", header->e_ident[6]);
-	printf("Entry point address: 0x%lx\n", (unsigned long)header->e_entry);
+}
+/**
+ * displayMyElfHeader - Function to display ELF header information
+ * @header: header information
+ */
+void displayMyElfHeader(MyElfHeader *header)
+{
+	printf("ELF Header:\n");
+	displayMagic(header->e_ident);
+	displayClass(header->e_ident);
 }
 /**
  * main - main function
