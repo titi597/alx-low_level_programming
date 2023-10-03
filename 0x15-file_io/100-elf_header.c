@@ -5,14 +5,14 @@
 #include <fcntl.h>
 #include <stdint.h>
 #include <string.h>
-#include <elf.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <elf.h>
 /**
- * displayElfHeader - Function to display ELF header information
+ * displayMyElfHeader - Function to display ELF header information
  * @header: header information
  */
-void displayElfHeader(ElfHeader *header)
+void displayMyElfHeader(MyElfHeader *header)
 {
 	int i;
 
@@ -50,7 +50,7 @@ void displayElfHeader(ElfHeader *header)
 			break;
 	}
 	printf("Version: %u (current)\n", header->e_ident[6]);
-	printf("Entry point address: 0x%lx\n", header->e_entry);
+	printf("Entry point address: 0x%lx\n", (unsigned long)header->e_entry);
 }
 /**
  * main - main function
@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
 {
 	const char *filename;
 	int fd;
-	ElfHeader header;
+	MyElfHeader header;
 	ssize_t bytes_read;
 
 	if (argc != 2)
@@ -79,16 +79,16 @@ int main(int argc, char *argv[])
 		perror("Error opening file");
 		return (98);
 	}
-	bytes_read = read(fd, &header, sizeof(ElfHeader));
+	bytes_read = read(fd, &header, sizeof(MyElfHeader));
 
-	if (bytes_read != sizeof(ElfHeader) ||
-			memcmp(header.e_ident, "\x7F\x45\x4C\x46", 4) != 0)
+	if (bytes_read != sizeof(MyElfHeader) ||
+			memcmp(header.e_ident, ELFMAG, SELFMAG) != 0)
 	{
 		fprintf(stderr, "Error: Not an ELF file\n");
 		close(fd);
 		return (98);
 	}
-	displayElfHeader(&header);
+	displayMyElfHeader(&header);
 	close(fd);
 	return (0);
 }
