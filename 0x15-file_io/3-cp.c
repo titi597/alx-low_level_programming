@@ -1,7 +1,8 @@
 #include "main.h"
+#include <stdio.h>
 
 /**
- * error_aptr - function that exit the error.
+ * error_aptr - function that fix the error.
  * @file_from: an array source
  * @file_to: an array destination
  * @argv: a pointer to an array
