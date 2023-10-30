@@ -25,12 +25,12 @@ void copy_file(const char *file_from, const char *file_to)
 
 	if (aptr_from == -1)
 	{
-		error_exit(98, "Error: Can't read from file");
+		error_exit(98, "Error: Can't read from file NAME_OF_THE_FILE");
 	}
 	if (aptr_to == -1)
 	{
 		close(aptr_from);
-		error_exit(99, "Error: Can't write to file");
+		error_exit(99, "Error: Can't write to NAME_OF_THE_FILE");
 	}
 	while ((tb_read = read(aptr_from, buffer, sizeof(buffer))) > 0)
 	{
@@ -39,22 +39,22 @@ void copy_file(const char *file_from, const char *file_to)
 		{
 			close(aptr_from);
 			close(aptr_to);
-			error_exit(99, "Error: Can't write to file");
+			error_exit(99, "Error: Can't write to NAME_OF_THE_FILE");
 		}
 	}
 	if (tb_read == -1)
 	{
 		close(aptr_from);
 		close(aptr_to);
-		error_exit(98, "Error: Can't read from file");
+		error_exit(98, "Error: Can't read from file NAME_OF_THE_FILE");
 	}
 	if (close(aptr_from) == -1)
 	{
-		error_exit(100, "Error: Can't close fd");
+		error_exit(100, "Error: Can't close fd FD_VALUE");
 	}
 	if (close(aptr_to) == -1)
 	{
-		error_exit(100, "Error: Can't close fd");
+		error_exit(100, "Error: Can't close fd FD_VALUE");
 	}
 }
 /**
