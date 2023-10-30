@@ -1,78 +1,68 @@
 #include "main.h"
 
 /**
- * error_exit - function that exit the error.
- * @code: an array
- * @msg: a pointer to an array
+ * error_aptr - function that exit the error.
+ * @file_from: an array source
+ * @file_to: an array destination
+ * @argv: a pointer to an array
  */
-void error_exit(int code, const char *msg)
+void error_aptr(int file_from, int file_to, char *argv[])
 {
-	dprintf(2, "%s\n", msg);
-	exit(code);
+	if (file_from == -1)
+	{
+		dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", argv[1]);
+		exit(98);
+	}
+	if (file_to == -1)
+	{
+		dprintf(STDERR_FILENO, "Error: Can't write from file %s\n", argv[2]);
+		exit(99);
+	}
 }
 
 /**
- * copy_file - function that copies
- * @file_from: pointer to an array of source file
- * @file_to: direction of poitner to an array
- */
-void copy_file(const char *file_from, const char *file_to)
-{
-	int aptr_from = open(file_from, O_RDONLY);
-	int aptr_to = open(file_to, O_WRONLY | O_CREAT | O_TRUNC, 0664);
-	char buffer[1024];
-	ssize_t tb_read, tb_written;
-
-	if (aptr_from == -1)
-	{
-		error_exit(98, "Error: Can't read from file NAME_OF_THE_FILE");
-	}
-	if (aptr_to == -1)
-	{
-		close(aptr_from);
-		error_exit(99, "Error: Can't write to NAME_OF_THE_FILE");
-	}
-	while ((tb_read = read(aptr_from, buffer, sizeof(buffer))) > 0)
-	{
-		tb_written = write(aptr_to, buffer, tb_read);
-		if (tb_written == -1)
-		{
-			close(aptr_from);
-			close(aptr_to);
-			error_exit(99, "Error: Can't write to NAME_OF_THE_FILE");
-		}
-	}
-	if (tb_read == -1)
-	{
-		close(aptr_from);
-		close(aptr_to);
-		error_exit(98, "Error: Can't read from file NAME_OF_THE_FILE");
-	}
-	if (close(aptr_from) == -1)
-	{
-		error_exit(100, "Error: Can't close fd FD_VALUE");
-	}
-	if (close(aptr_to) == -1)
-	{
-		error_exit(100, "Error: Can't close fd FD_VALUE");
-	}
-}
-/**
- * main - main function for argument handling.
- * @argc: an array
- * @argv: pointer to an array
+ * main - function that handles argumnets
+ * @argc: pointer to an array of source file
+ * @argv: direction of poitner to an array
  * Return: 0 (success)
  */
 int main(int argc, char *argv[])
 {
-	const char *file_from = argv[1];
-	const char *file_to = argv[2];
+	int file_from, file_to, error_exit;
+	char buffer[1024];
+	ssize_t tb_read, tb_written;
 
 	if (argc != 3)
 	{
-		error_exit(97, "Usage: cp file_from file_to");
+		dprintf(STDERR_FILENO, "%s\n", "Usage: cp file_from file_to");
+		exit(97);
 	}
-	copy_file(file_from, file_to);
+	file_from = open(argv[1], O_RDONLY);
+	file_to = open(argv[2], O_CREAT | O_TRUNC | O_APPEND, 0664);
+	error_aptr(file_from, file_to, argv);
+
+	tb_read = 1024;
+	while (tb_read == 1024)
+	{
+		tb_read = read(file_from, buffer, 1024);
+		if (tb_read == -1)
+			error_aptr(-1, 0, argv);
+		tb_written = write(file_to, buffer, tb_read);
+		if (tb_written == -1)
+			error_aptr(0, -1, argv);
+	}
+	error_exit = close(file_from);
+	if (error_exit == -1)
+	{
+		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", file_from);
+		exit(100);
+	}
+	error_exit = close(file_to);
+	if (error_exit == -1)
+	{
+		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", file_to);
+		exit(100);
+	}
 	return (0);
 }
 
