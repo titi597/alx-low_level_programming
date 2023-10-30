@@ -10,6 +10,7 @@
  * @letters: an array
  * Return: the actual number of letters it could read and print.
  */
+
 ssize_t read_textfile(const char *filename, size_t letters)
 {
 	FILE *aptr = fopen(filename, "r");
@@ -19,11 +20,11 @@ ssize_t read_textfile(const char *filename, size_t letters)
 
 	if (filename == NULL)
 	{
-		return (-1);
+		return (0);
 	}
 	if (aptr == NULL)
 	{
-		return (0);
+		return (-1);
 	}
 	if (vam == NULL)
 	{
