@@ -29,14 +29,15 @@ void error_aptr(int file_from, int file_to, char *argv[])
 int main(int argc, char *argv[])
 {
 	int file_from, file_to, error_exit;
-	char buffer[1024];
 	ssize_t tb_read, tb_written;
+	char buffer[1024];
 
 	if (argc != 3)
 	{
 		dprintf(STDERR_FILENO, "%s\n", "Usage: cp file_from file_to");
 		exit(97);
 	}
+
 	file_from = open(argv[1], O_RDONLY);
 	file_to = open(argv[2], O_CREAT | O_WRONLY | O_TRUNC | O_APPEND, 0664);
 	error_aptr(file_from, file_to, argv);
@@ -51,12 +52,14 @@ int main(int argc, char *argv[])
 		if (tb_written == -1)
 			error_aptr(0, -1, argv);
 	}
+
 	error_exit = close(file_from);
 	if (error_exit == -1)
 	{
 		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", file_from);
 		exit(100);
 	}
+
 	error_exit = close(file_to);
 	if (error_exit == -1)
 	{
