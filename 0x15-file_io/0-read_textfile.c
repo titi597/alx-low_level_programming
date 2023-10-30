@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
 #include "main.h"
 
 /**
@@ -13,41 +10,34 @@
 
 ssize_t read_textfile(const char *filename, size_t letters)
 {
-	FILE *aptr = fopen(filename, "r");
-	char *vam = (char *)malloc(letters + 1);
-	ssize_t tbyRead = fread(vam, 1, letters, aptr);
-	ssize_t tbyWritten = write(STDOUT_FILENO, vam, tbyRead);
+	int aptr;
+	ssize_t tbRead;
+	ssize_t tbyWritten;
+	char * buffer;
 
 	if (filename == NULL)
 	{
 		return (0);
 	}
-	if (aptr == NULL)
+
+	aptr = open(filename, O_RDONLY);
+
+	if (aptr == -1)
 	{
-		return (-1);
-	}
-	if (vam == NULL)
-	{
-		fclose(aptr);
 		return (0);
 	}
-	if (tbyRead < 0)
+	buffer = malloc(sizeof(char) * letters);
+
+	if (buffer == NULL)
 	{
-		fclose(aptr);
-		free(vam);
 		return (0);
 	}
 
-	vam[tbyRead] = '\0';
+	tbRead = read(aptr, buffer, letters);
+	tbyWritten = write(STDOUT_FILENO, buffer, tbRead);
 
-	if (tbyWritten < 0 || (size_t)tbyWritten != (size_t)tbyRead)
-	{
-		fclose(aptr);
-		free(vam);
-		return (0);
-	}
-	fclose(aptr);
-	free(vam);
+	close(aptr);
+	free(buffer);
 	return (tbyWritten);
 }
 
